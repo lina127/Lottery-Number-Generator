@@ -1,0 +1,173 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Lottery Number Generator</title>
+  <meta name="description" content="A lottery number generator">
+  <meta name="author" content="JH&YH">
+
+  <meta property="og:title" content="A lottery number generator">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="A lottery number generator">
+  <meta property="og:image" content="">
+
+  <link rel="icon" href="/">
+  <link rel="icon" href="/" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="style.css?ver=1.6">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mt-4 mb-4">
+        <h1 class="display-5 text-center">Lottery Number Generator</h1>
+      </div>
+      <div class="col-2">
+        <img src="img/lottomax.png" width="100%" id="lottomax" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/lotto649.png" width="100%" id="lotto649" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/daily-grand.png" width="100%" id="dailyGrand" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/daily-keno.png" width="100%" id="dailyKeno" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/ontario49.png" width="100%" id="ontario49" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/lottario.png" width="100%" id="lottario" class="lotteryImg" />
+      </div>
+      <div class="col-2">
+        <img src="img/lightningLotto.png" width="100%" id="lightningLotto" class="lotteryImg" />
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal fade" id="numbersModal" tabindex="-1" aria-labelledby="numbersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="numbersModalLabel">Generated Numbers</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center" id="modal-body">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <script type="text/javascript">
+    $("document").ready(function(){
+      var bonus = false;
+      $(".lotteryImg").click(function(e){
+        e.preventDefault();
+        var id = $(this)[0].id;
+        var data;
+        switch(id){
+          case "lottomax":
+            data = {
+              maxNum : 50,
+              pick : 7,
+              bonus : true
+            };
+            bonus = true;
+          break;
+          case "lotto649":
+            data = {
+              maxNum : 49,
+              pick : 6,
+              bonus : true
+            }
+            bonus = true;
+          break;
+          case "dailyGrand":
+            data = {
+              maxNum : 49,
+              pick : 5,
+              bonus : true
+            }
+            bonus = true;
+          break;
+          case "ontario49":
+            data = {
+              maxNum : 49,
+              pick : 6,
+              bonus : true
+            }
+            bonus = true;
+          break;
+          case "dailyKeno":
+            data = {
+              maxNum : 70,
+              pick : 20,
+              bonus : false
+            }
+            bonus = false;
+          break;
+          case "lottario":
+            data = {
+              maxNum : 45,
+              pick : 6,
+              bonus : true
+            }
+            bonus = true;
+          break;
+          case "lightningLotto":
+            data = {
+              maxNum : 49,
+              pick : 5,
+              bonus : true
+            }
+            bonus = true;
+          break;
+        }
+
+        var request = $.ajax({
+          method: "POST",
+          url: "lottery.php",
+          data: data,
+        });
+
+        request.done(function(returnVal){
+          if(returnVal != null){
+            returnVal = $.parseJSON(returnVal);
+            $("#modal-body").html("");
+            returnVal.forEach(num => $("#modal-body").append("<div class='number'>" + num + "</div>") );
+
+            if(bonus){
+              $(".number:last").addClass("bonusNumber");
+            }
+          }
+          $("#numbersModal").modal("show");
+        });
+
+        request.fail(function( jqXHR, textStatus ) {
+          alert( "Request failed: " + textStatus );
+        });
+      });
+    });
+
+  </script>
+</body>
+</html>
