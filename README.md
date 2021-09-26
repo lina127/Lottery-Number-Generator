@@ -8,7 +8,7 @@ HTML, PHP, Javascript, jQuery and Bootstrap has been used in this project.
 * Since some lotteries need a bonus number, it will also generate the number automatically with different color.
 * Display the result, total amount, earned amount and 
 
-*User interface as shown below:*  
+**User interface as shown below:**
 
   
  Select lottery type:
